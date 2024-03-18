@@ -1,0 +1,29 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: "0.0.0.0:4318"
+      grpc:
+        endpoint: "0.0.0.0:4317"
+
+exporters:
+  otlphttp/jaeger:
+    endpoint: "http://jaeger:4318" # Replace with your Jaeger endpoint
+    tls:
+      insecure: true
+  logging: 
+    verbosity: detailed
+
+  # newrelic:
+  #   api_key : "YOUR_API"
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [logging, otlphttp/jaeger]
+      # exporters: [otlp, newrelic]
+    metrics:
+      receivers: [otlp]
+      exporters: [logging, otlphttp/jaeger]
+      # exporters: [otlp, newrelic]
